@@ -54,6 +54,7 @@ RUN \
   echo "#################################################" && \
   echo "Building softhsm2 ..." && \
   echo "#################################################" && \
+  echo "Downloading [$SOFTHSM_SOURCE_URL]..." && \
   curl -fsS "$SOFTHSM_SOURCE_URL" | tar xvz && \
   mv SoftHSMv2-* softhsm2 && \
   cd softhsm2 && \
