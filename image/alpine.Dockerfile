@@ -42,6 +42,7 @@ RUN --mount=type=bind,source=.shared,target=/mnt/shared \
      sqlite \
      sqlite-dev \
      # additional packages required by pkcs11-proxy
+     bash \
      cmake \
      libseccomp-dev
 
@@ -68,6 +69,8 @@ RUN \
   curl -fsS "$PKCS11_PROXY_SOURCE_URL" | tar xvz && \
   mv pkcs11-proxy-* pkcs11-proxy && \
   cd pkcs11-proxy && \
+  pwd && \
+  ls -l /pkcs11-proxy/mksyscalls.sh && \
   cmake . && \
   make && \
   make install

@@ -96,7 +96,8 @@ DOCKER_BUILDKIT=1 docker build "$project_root" \
    --build-arg GIT_COMMIT_HASH="$(git rev-parse --short HEAD)" \
    --build-arg GIT_REPO_URL="$(git config --get remote.origin.url)" \
    --build-arg SOFTHSM_SOURCE_URL="$softhsm_source_url" \
-   --build-arg PKCS11_PROXY_SOURCE_URL="https://codeload.github.com/scobiej/pkcs11-proxy/tar.gz/refs/heads/osx-openssl1-1" \
+   --build-arg PKCS11_PROXY_SOURCE_URL="https://codeload.github.com/smallstep/pkcs11-proxy/tar.gz/refs/heads/master" \
+   `#--build-arg PKCS11_PROXY_SOURCE_URL="https://codeload.github.com/scobiej/pkcs11-proxy/tar.gz/refs/heads/osx-openssl1-1"` \
    `#--build-arg PKCS11_PROXY_SOURCE_URL="https://codeload.github.com/SUNET/pkcs11-proxy/tar.gz/refs/heads/master"` \
    -t $image_name \
    "$@"
