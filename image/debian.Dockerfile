@@ -101,7 +101,7 @@ RUN --mount=type=bind,source=.shared,target=/mnt/shared \
   echo "Installing required packages..." && \
   echo "#################################################" && \
   apt-get install --no-install-recommends -y \
-     libssl1.1 \
+     libssl3 \
      opensc `# contains pkcs11-tool` \
      libsqlite3-0 \
      tini \
