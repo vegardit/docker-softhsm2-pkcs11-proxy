@@ -28,10 +28,10 @@ Client applications can communicate with the HSM via TCP/TLS using libpkcs11-pro
 
 |Tag|Description|OS
 |-|-|-
-|`:latest` <br> `:latest-alpine` | daily the latest available release | Alpine Latest
-|`:latest-debian` | daily the latest available release | Debian Stable
+|`:latest` <br> `:latest-alpine` | build of the latest available release | Alpine Latest
+|`:latest-debian` | build of the latest available release | Debian Stable
 |`:develop` <br> `:develop-alpine` | daily build of the development branch | Alpine Latest
-|`:develop-debian` | daily build of the development branch | Debian Stable
+|`:develop-debian` | build of the development branch | Debian Stable
 |`:2.x` <br> `:2.x-alpine` | build of the latest minor version of the respective <br> major release, e.g. `2.x` may contain release `2.1` | Alpine Latest
 |`:2.x-debian` | build of the latest minor version of the respective <br> major release, e.g. `2.x` may contain release `2.1` | Debian Stable
 
