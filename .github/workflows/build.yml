@@ -63,8 +63,8 @@ jobs:
         SOFTHSM_VERSION: ${{ matrix.SOFTHSM_VERSION }}
         TRIVY_GITHUB_TOKEN: ${{ github.token }}
       run: |
-        if [ "$GITHUB_REF" == "refs/heads/main" ]; then
+        if [[ $GITHUB_REF_NAME == "main" && $ACT != "true" ]]; then
           export DOCKER_PUSH=1
+          echo "$DOCKER_REGISTRY_TOKEN" | docker login -u="$DOCKER_REGISTRY_USERNAME" "$DOCKER_REGISTRY" --password-stdin
         fi
-        echo "$DOCKER_REGISTRY_TOKEN" | docker login -u="$DOCKER_REGISTRY_USERNAME" "$DOCKER_REGISTRY" --password-stdin
         bash build-image.sh
