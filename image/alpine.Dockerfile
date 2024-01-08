@@ -97,7 +97,7 @@ RUN --mount=type=bind,source=.shared,target=/mnt/shared \
   apk add --no-cache \
      bash \
      libstdc++ \
-     libssl1.1 \
+     libssl3 \
      opensc `# contains pkcs11-tool` \
      sqlite-libs \
      tini \
