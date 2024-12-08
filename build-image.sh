@@ -23,16 +23,16 @@ base_image_linux_flavor=${base_image_name%%:*}
 app_version=${SOFTHSM_VERSION:-latest}
 case $app_version in \
    latest)
-      #app_version=$(curl -sSfL https://github.com/opendnssec/SoftHSMv2/releases/latest | sed -n "s/.*releases\/tag\/\([0-9]\.[0-9]\.[0-9]\)['\"].*/\1/p" | head -1)
-      app_version=$(curl -sSfL https://github.com/opendnssec/SoftHSMv2/tags | sed -n "s/.*releases\/tag\/\([0-9]\.[0-9]\.[0-9]\)['\"].*/\1/p" | head -1)
-      softhsm_source_url=https://codeload.github.com/opendnssec/SoftHSMv2/tar.gz/refs/tags/$app_version
+      #app_version=$(curl -sSfL https://github.com/softhsm/SoftHSMv2/releases/latest | sed -n "s/.*releases\/tag\/\([0-9]\.[0-9]\.[0-9]\)['\"].*/\1/p" | head -1)
+      app_version=$(curl -sSfL https://github.com/softhsm/SoftHSMv2/tags | sed -n "s/.*releases\/tag\/\([0-9]\.[0-9]\.[0-9]\)['\"].*/\1/p" | head -1)
+      softhsm_source_url=https://codeload.github.com/softhsm/SoftHSMv2/tar.gz/refs/tags/$app_version
       app_version_is_latest=1
      ;;
    develop)
-      softhsm_source_url=https://codeload.github.com/opendnssec/SoftHSMv2/tar.gz/refs/heads/develop
+      softhsm_source_url=https://codeload.github.com/softhsm/SoftHSMv2/tar.gz/refs/heads/develop
      ;;
    *)
-      softhsm_source_url=https://codeload.github.com/opendnssec/SoftHSMv2/tar.gz/refs/tags/$app_version
+      softhsm_source_url=https://codeload.github.com/softhsm/SoftHSMv2/tar.gz/refs/tags/$app_version
      ;;
 esac
 echo "app_version=$app_version"

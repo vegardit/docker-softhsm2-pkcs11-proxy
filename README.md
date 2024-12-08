@@ -16,7 +16,7 @@
 
 > **SoftHSM has been developed for development purposes only. Don't use in production!**
 
-Docker image to run a virtual HSM (Hardware Security Module) network service based on [SoftHSM2](https://github.com/opendnssec/SoftHSMv2) and
+Docker image to run a virtual HSM (Hardware Security Module) network service based on [SoftHSM2](https://github.com/softhsm/SoftHSMv2) and
 [pkcs11-proxy](https://github.com/SUNET/pkcs11-proxy/).
 
 Client applications can communicate with the HSM via TCP/TLS using libpkcs11-proxy.so and an OpenSSL TLS-PSK:
@@ -267,8 +267,8 @@ This is a simple exercise to get you familiar with how a client container can in
 ## <a name="resources"></a>Resources
 
 - SoftHSM:
-  - website: https://www.opendnssec.org/softhsm/
-  - sources: https://github.com/opendnssec/SoftHSMv2
+  - website: https://www.softhsm.org/
+  - sources: https://github.com/softhsm/SoftHSMv2
   - tutorials:
     - [SoftHSM2 first steps to create slots](https://verschlüsselt.it/softhsm2-first-steps/)
 - pkcs11-proxy:
