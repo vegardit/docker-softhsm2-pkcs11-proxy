@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/github/license/vegardit/docker-softhsm2-pkcs11-proxy.svg?label=license)](#license)
 [![Docker Pulls](https://img.shields.io/docker/pulls/vegardit/softhsm2-pkcs11-proxy.svg)](https://hub.docker.com/r/vegardit/softhsm2-pkcs11-proxy)
 [![Docker Stars](https://img.shields.io/docker/stars/vegardit/softhsm2-pkcs11-proxy.svg)](https://hub.docker.com/r/vegardit/softhsm2-pkcs11-proxy)
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.1%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
 
 1. [What is it?](#what-is-it)
 1. [Docker image tagging scheme](#tags)
