@@ -7,6 +7,7 @@
 #
 # https://github.com/vegardit/docker-softhsm2-pkcs11-proxy
 
+# shellcheck disable=SC1091  # Not following: /opt/bash-init.sh was not specified as input
 type -t log >/dev/null || source /opt/bash-init.sh
 
 shopt -s expand_aliases

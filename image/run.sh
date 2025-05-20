@@ -7,6 +7,7 @@
 #
 # https://github.com/vegardit/docker-softhsm2-pkcs11-proxy
 
+# shellcheck disable=SC1091  # Not following: /opt/bash-init.sh was not specified as input
 source /opt/bash-init.sh
 
 #################################################
@@ -40,6 +41,7 @@ esac
 #################################################
 if [[ -f $INIT_SH_FILE ]]; then
    log INFO "Loading [$INIT_SH_FILE]..."
+   # shellcheck disable=SC1090  # ShellCheck can't follow non-constant source
    source "$INIT_SH_FILE"
 fi
 

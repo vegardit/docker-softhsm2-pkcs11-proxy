@@ -26,14 +26,14 @@ Client applications can communicate with the HSM via TCP/TLS using libpkcs11-pro
 
 ## <a name="tags"></a>Docker image tagging scheme
 
-|Tag|Description|OS
+|Tag|Description|Base Image
 |-|-|-
-|`:latest` <br> `:latest-alpine` | build of the latest available release | Alpine Latest
-|`:latest-debian` | build of the latest available release | Debian Stable
-|`:develop` <br> `:develop-alpine` | daily build of the development branch | Alpine Latest
-|`:develop-debian` | build of the development branch | Debian Stable
-|`:2.x` <br> `:2.x-alpine` | build of the latest minor version of the respective <br> major release, e.g. `2.x` may contain release `2.1` | Alpine Latest
-|`:2.x-debian` | build of the latest minor version of the respective <br> major release, e.g. `2.x` may contain release `2.1` | Debian Stable
+|`:latest` <br> `:latest-alpine` | weekly build of the latest available SoftHSM release | alpine:latest
+|`:latest-debian` | weekly build of the latest available SoftHSM release | debian:stable-slim
+|`:develop` <br> `:develop-alpine` | weekly build of the development branch | alpine:latest
+|`:develop-debian` | weekly build of the development branch | debian:stable-slim
+|`:2.x` <br> `:2.x-alpine` | weekly build of the latest minor version of the respective <br> major release, e.g. `2.x` may contain release `2.6` | alpine:latest
+|`:2.x-debian` | weekly build of the latest minor version of the respective <br> major release, e.g. `2.x` may contain release `2.6` | debian:stable-slim
 
 See all tags at https://hub.docker.com/r/vegardit/softhsm2-pkcs11-proxy/tags
 
