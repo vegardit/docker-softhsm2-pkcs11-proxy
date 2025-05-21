@@ -36,7 +36,7 @@ defaults:
     shell: bash
 
 env:
-  DOCKER_IMAGE_REPO: ${{ github.repository_owner }}/softhsm2-pkcs11-proxy
+  DOCKER_REPO_NAME: softhsm2-pkcs11-proxy
   TRIVY_CACHE_DIR: ~/.trivy/cache
 
 jobs:
@@ -85,14 +85,14 @@ jobs:
 
     - name: Check Alpine Dockerfile
       uses: hadolint/hadolint-action@v3.1.0
-      if: ${{ startsWith(matrix.DOCKER_BASE_IMAGE, 'alpine') }}
+      if: ${{ contains(matrix.DOCKER_BASE_IMAGE, 'alpine') }}
       with:
         dockerfile: image/alpine.Dockerfile
 
 
     - name: Check Debian Dockerfile
       uses: hadolint/hadolint-action@v3.1.0
-      if: ${{ startsWith(matrix.DOCKER_BASE_IMAGE, 'debian') }}
+      if: ${{ contains(matrix.DOCKER_BASE_IMAGE, 'debian') }}
       with:
         dockerfile: image/debian.Dockerfile
 
@@ -116,11 +116,13 @@ jobs:
 
 
     - name: "Determine if docker images shall be published"
+      id: docker_push_actions
       run: |
         # ACT -> https://nektosact.com/usage/index.html#skipping-steps
         set -x
         if [[ $GITHUB_REF_NAME == 'main' && $GITHUB_EVENT_NAME != 'pull_request' && -z "$ACT" ]]; then
           echo "DOCKER_PUSH_GHCR=true" >> "$GITHUB_ENV"
+          echo "DOCKER_PUSH_GHCR=true" >> $GITHUB_OUTPUT
           if [[ -n "${{ secrets.DOCKER_HUB_USERNAME }}" ]]; then
             echo "DOCKER_PUSH=true" >> "$GITHUB_ENV"
           fi
@@ -144,9 +146,40 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
 
-    - name: Build ${{ env.DOCKER_IMAGE_REPO }}:${{ matrix.SOFTHSM_VERSION }}
+    - name: Build ${{ env.DOCKER_REPO_NAME }}:${{ matrix.SOFTHSM_VERSION }}
       env:
         DOCKER_BASE_IMAGE: ${{ matrix.DOCKER_BASE_IMAGE }}
+        DOCKER_IMAGE_REPO: ${{ github.repository_owner }}/${{ env.DOCKER_REPO_NAME }}
         SOFTHSM_VERSION: ${{ matrix.SOFTHSM_VERSION }}
         TRIVY_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: bash build-image.sh
+
+    outputs:
+      DOCKER_PUSH_GHCR: ${{ steps.docker_push_actions.outputs.DOCKER_PUSH_GHCR }}
+
+
+  ###########################################################
+  delete-untagged-images:
+  ###########################################################
+    runs-on: ubuntu-latest  # https://github.com/actions/runner-images#available-images
+    timeout-minutes: 5
+    needs: [build]
+    if: ${{ needs.build.outputs.DOCKER_PUSH_GHCR }}
+
+    concurrency:
+      group: ${{ github.workflow }}
+      cancel-in-progress: false
+      
+    permissions:
+      packages: write
+
+    steps:
+    - name: Delete untagged images
+      uses: dataaxiom/ghcr-cleanup-action@v1
+      with:
+        package: ${{ env.DOCKER_REPO_NAME }}
+        delete-untagged: true
+        delete-partial-images: true
+        delete-ghost-images: true
+        delete-orphaned-images: true
+        validate: true
