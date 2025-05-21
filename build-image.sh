@@ -83,7 +83,7 @@ image_name=${tags[0]}
 # build the image
 #################################################
 log INFO "Building docker image [$image_name]..."
-if [[ $OSTYPE == cygwin || $OSTYPE == msys ]]; then
+if [[ $OSTYPE == "cygwin" || $OSTYPE == "msys" ]]; then
    project_root=$(cygpath -w "$project_root")
 fi
 
@@ -97,7 +97,7 @@ esac
 set -x
 
 docker --version
-export DOCKER_BUILD_KIT=1
+export DOCKER_BUILDKIT=1
 export DOCKER_CLI_EXPERIMENTAL=1 # prevents "docker: 'buildx' is not a docker command."
 
 # Register QEMU emulators for all architectures so Docker can run and build multi-arch images
@@ -111,6 +111,7 @@ echo "
 
 docker buildx version # ensures buildx is enabled
 docker buildx create --config /etc/buildkitd.toml --use # prevents: error: multiple platforms feature is currently not supported for docker driver. Please switch to a different driver (eg. "docker buildx create --use")
+trap 'docker buildx stop' EXIT
 # shellcheck disable=SC2154,SC2046  # base_layer_cache_key is referenced but not assigned / Quote this to prevent word splitting
 docker buildx build "$project_root" \
    --file "image/$dockerfile" \
@@ -129,18 +130,17 @@ docker buildx build "$project_root" \
    --build-arg PKCS11_PROXY_SOURCE_URL="https://codeload.github.com/smallstep/pkcs11-proxy/tar.gz/refs/heads/master" \
    `#--build-arg PKCS11_PROXY_SOURCE_URL="https://codeload.github.com/scobiej/pkcs11-proxy/tar.gz/refs/heads/osx-openssl1-1"` \
    `#--build-arg PKCS11_PROXY_SOURCE_URL="https://codeload.github.com/SUNET/pkcs11-proxy/tar.gz/refs/heads/master"` \
-   $(if [[ ${ACT:-} == true || ${DOCKER_PUSH:-} != true ]]; then \
+   $(if [[ ${ACT:-} == "true" || ${DOCKER_PUSH:-} != "true" ]]; then \
       echo -n "--load --output type=docker"; \
    else \
       echo -n "--platform linux/amd64,linux/arm64" `# ,linux/arm/v7"`; \
    fi) \
    "${tag_args[@]}" \
-   $(if [[ ${DOCKER_PUSH:-} == true ]]; then echo -n "--push"; fi) \
+   $(if [[ ${DOCKER_PUSH:-} == "true" ]]; then echo -n "--push"; fi) \
    "$@"
-docker buildx stop
 set +x
 
-if [[ ${DOCKER_PUSH:-} == true ]]; then
+if [[ ${DOCKER_PUSH:-} == "true" ]]; then
    docker image pull "$image_name"
 fi
 
@@ -157,7 +157,7 @@ echo
 #################################################
 # perform security audit
 #################################################
-if [[ ${DOCKER_AUDIT_IMAGE:-1} == 1 ]]; then
+if [[ ${DOCKER_AUDIT_IMAGE:-1} == "1" ]]; then
    bash "$shared_lib/cmd/audit-image.sh" "$image_name"
 fi
 
@@ -165,7 +165,7 @@ fi
 #################################################
 # push image to ghcr.io
 #################################################
-if [[ ${DOCKER_PUSH_GHCR:-} == true ]]; then
+if [[ ${DOCKER_PUSH_GHCR:-} == "true" ]]; then
    for tag in "${tags[@]}"; do
       set -x
       docker run --rm \

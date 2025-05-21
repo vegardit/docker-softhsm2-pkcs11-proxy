@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 #
-# Copyright 2021 by Vegard IT GmbH, Germany, https://vegardit.com
+# SPDX-FileCopyrightText: © Vegard IT GmbH (https://vegardit.com)
+# SPDX-FileContributor: Sebastian Thomschke
 # SPDX-License-Identifier: Apache-2.0
-#
-# Author: Sebastian Thomschke, Vegard IT GmbH
-#
-# https://github.com/vegardit/docker-softhsm2-pkcs11-proxy
+# SPDX-ArtifactOfProjectHomePage: https://github.com/vegardit/docker-softhsm2-pkcs11-proxy
 
 # shellcheck disable=SC1091  # Not following: /opt/bash-init.sh was not specified as input
-source /opt/bash-init.sh
+source /opt/bash-init.sh  # https://github.com/vegardit/docker-shared/blob/v1/lib/bash-init.sh
 
 #################################################
 # print header

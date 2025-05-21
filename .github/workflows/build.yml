@@ -53,9 +53,7 @@ jobs:
     strategy:
       matrix:
         SOFTHSM_VERSION: [ "latest", "develop" ]
-        DOCKER_BASE_IMAGE:
-        - ghcr.io/dockerhub-mirror/alpine:latest
-        - ghcr.io/dockerhub-mirror/debian:stable-slim
+        DOCKER_BASE_IMAGE: [ alpine:latest, "debian:stable-slim" ]
 
     steps:
     - name: "Show: GitHub context"
@@ -148,7 +146,7 @@ jobs:
 
     - name: Build ${{ env.DOCKER_REPO_NAME }}:${{ matrix.SOFTHSM_VERSION }}
       env:
-        DOCKER_BASE_IMAGE: ${{ matrix.DOCKER_BASE_IMAGE }}
+        DOCKER_BASE_IMAGE: ghcr.io/dockerhub-mirror/${{ matrix.DOCKER_BASE_IMAGE }}
         DOCKER_IMAGE_REPO: ${{ github.repository_owner }}/${{ env.DOCKER_REPO_NAME }}
         SOFTHSM_VERSION: ${{ matrix.SOFTHSM_VERSION }}
         TRIVY_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
