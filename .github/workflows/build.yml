@@ -53,7 +53,7 @@ jobs:
     strategy:
       matrix:
         SOFTHSM_VERSION: [ "latest", "develop" ]
-        DOCKER_BASE_IMAGE: [ alpine:latest, "debian:stable-slim" ]
+        DOCKER_BASE_IMAGE: [ alpine:3, "debian:stable-slim" ]
 
     steps:
     - name: "Show: GitHub context"
