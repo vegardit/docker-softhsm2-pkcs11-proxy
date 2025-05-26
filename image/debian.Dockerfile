@@ -7,11 +7,12 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-ArtifactOfProjectHomePage: https://github.com/vegardit/docker-softhsm2-pkcs11-proxy
 
+# https://hub.docker.com/_/debian/tags?name=stable-slim
+ARG BASE_IMAGE=debian:stable-slim
+
 #############################################################
 # build softhsmv2 + pkcs11-proxy
 #############################################################
-# https://hub.docker.com/_/debian/tags?name=stable-slim
-ARG BASE_IMAGE=debian:stable-slim
 
 # https://github.com/hadolint/hadolint/wiki/DL3006 Always tag the version of an image explicitly
 # hadolint ignore=DL3006
@@ -20,12 +21,12 @@ FROM ${BASE_IMAGE} AS builder
 ARG DEBIAN_FRONTEND=noninteractive
 ARG LC_ALL=C
 
-ARG BASE_LAYER_CACHE_KEY
+SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
 ARG SOFTHSM_SOURCE_URL
 ARG PKCS11_PROXY_SOURCE_URL
 
-SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
+ARG BASE_LAYER_CACHE_KEY
 
 # https://github.com/hadolint/hadolint/wiki/DL3008 Pin versions
 # hadolint ignore=DL3008
@@ -36,23 +37,23 @@ RUN --mount=type=bind,source=.shared,target=/mnt/shared <<EOF
   echo "Installing required dev packages..."
   echo "#################################################"
   apt-get install --no-install-recommends -y \
-     `# required by curl:` \
-     ca-certificates \
-     curl \
-     `# required for autogen.sh:` \
-     autoconf \
-     automake \
-     libtool \
-     python3-pkgconfig \
-     `# required for configure/make:` \
-     build-essential \
-     libssl-dev \
-     `# additional packages required by softhsm:` \
-     sqlite3 \
-     libsqlite3-dev \
-     `# additional packages required by pkcs11-proxy:` \
-     cmake \
-     libseccomp-dev
+    `# required by curl:` \
+    ca-certificates \
+    curl \
+    `# required for autogen.sh:` \
+    autoconf \
+    automake \
+    libtool \
+    python3-pkgconfig \
+    `# required for configure/make:` \
+    build-essential \
+    libssl-dev \
+    `# additional packages required by softhsm:` \
+    sqlite3 \
+    libsqlite3-dev \
+    `# additional packages required by pkcs11-proxy:` \
+    cmake \
+    libseccomp-dev
 
 EOF
 
@@ -97,19 +98,15 @@ EOF
 
 # https://github.com/hadolint/hadolint/wiki/DL3006 Always tag the version of an image explicitly
 # hadolint ignore=DL3006
-FROM ${BASE_IMAGE}
-
-LABEL maintainer="Vegard IT GmbH (vegardit.com)"
-
-# https://github.com/hadolint/hadolint/wiki/DL3002 Last USER should not be root
-# hadolint ignore=DL3002
-USER root
+FROM ${BASE_IMAGE} as final
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG LC_ALL=C
 
-ARG BASE_LAYER_CACHE_KEY
+SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
+
 ARG INSTALL_SUPPORT_TOOLS=0
+ARG BASE_LAYER_CACHE_KEY
 
 # https://github.com/hadolint/hadolint/wiki/DL3008 Pin versions
 # hadolint ignore=DL3008
@@ -121,10 +118,10 @@ RUN --mount=type=bind,source=.shared,target=/mnt/shared <<EOF
   echo "Installing required packages..."
   echo "#################################################"
   apt-get install --no-install-recommends -y \
-     libssl3 \
-     opensc `# contains pkcs11-tool` \
-     libsqlite3-0 \
-     tini
+    libssl3 \
+    opensc `# contains pkcs11-tool` \
+    libsqlite3-0 \
+    tini
 
   /mnt/shared/cmd/debian-cleanup.sh
 
@@ -162,26 +159,38 @@ ENV \
   PKCS11_DAEMON_SOCKET="tls://0.0.0.0:2345" \
   PKCS11_PROXY_TLS_PSK_FILE="/opt/test.tls.psk"
 
-ARG BUILD_DATE
-ARG GIT_BRANCH
-ARG GIT_COMMIT_HASH
-ARG GIT_COMMIT_DATE
-ARG GIT_REPO_URL
+ARG OCI_authors
+ARG OCI_title
+ARG OCI_description
+ARG OCI_source
+ARG OCI_revision
+ARG OCI_version
+ARG OCI_created
 
+ARG GIT_BRANCH
+ARG GIT_COMMIT_DATE
+
+# https://github.com/opencontainers/image-spec/blob/main/annotations.md
 LABEL \
-  org.label-schema.schema-version="1.0" \
-  org.label-schema.build-date=$BUILD_DATE \
-  org.label-schema.vcs-ref=$GIT_COMMIT_HASH \
-  org.label-schema.vcs-url=$GIT_REPO_URL
+  org.opencontainers.image.title="$OCI_title" \
+  org.opencontainers.image.description="$OCI_description" \
+  org.opencontainers.image.source="$OCI_source" \
+  org.opencontainers.image.revision="$OCI_revision" \
+  org.opencontainers.image.version="$OCI_version" \
+  org.opencontainers.image.created="$OCI_created"
+
+LABEL maintainer="$OCI_authors"
 
 RUN <<EOF
-  set -eu
-  #shellcheck disable=SC3037  # In POSIX sh, echo flags are undefined.
-  echo -e "\
-GIT_REPO:    $GIT_REPO_URL\n\
-GIT_BRANCH:  $GIT_BRANCH\n\
-GIT_COMMIT:  $GIT_COMMIT_HASH @ $GIT_COMMIT_DATE\n\
-IMAGE_BUILD: $BUILD_DATE" >/opt/build_info
+  echo "#################################################"
+  echo "Writing build_info..."
+  echo "#################################################"
+  cat <<EOT >/opt/build_info
+GIT_REPO:    $OCI_source
+GIT_BRANCH:  $GIT_BRANCH
+GIT_COMMIT:  $OCI_revision @ $GIT_COMMIT_DATE
+IMAGE_BUILD: $OCI_created
+EOT
   cat /opt/build_info
 
   mkdir -p /var/lib/softhsm/tokens/
