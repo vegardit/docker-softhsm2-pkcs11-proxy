@@ -82,14 +82,14 @@ jobs:
 
 
     - name: Check Alpine Dockerfile
-      uses: hadolint/hadolint-action@v3.2.0
+      uses: hadolint/hadolint-action@v3.3.0
       if: ${{ contains(matrix.DOCKER_BASE_IMAGE, 'alpine') }}
       with:
         dockerfile: image/alpine.Dockerfile
 
 
     - name: Check Debian Dockerfile
-      uses: hadolint/hadolint-action@v3.2.0
+      uses: hadolint/hadolint-action@v3.3.0
       if: ${{ contains(matrix.DOCKER_BASE_IMAGE, 'debian') }}
       with:
         dockerfile: image/debian.Dockerfile
