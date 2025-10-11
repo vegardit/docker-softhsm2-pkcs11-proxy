@@ -28,7 +28,7 @@ ARG PKCS11_PROXY_SOURCE_URL
 
 ARG BASE_LAYER_CACHE_KEY
 
-# https://github.com/hadolint/hadolint/wiki/DL3008 Pin versions
+# https://github.com/hadolint/hadolint/wiki/DL3008 Pin versions in apt-get
 # hadolint ignore=DL3008
 RUN --mount=type=bind,source=.shared,target=/mnt/shared <<EOF
   /mnt/shared/cmd/debian-install-os-updates.sh
