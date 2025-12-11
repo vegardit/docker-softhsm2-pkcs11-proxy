@@ -30,7 +30,7 @@ case $app_version in \
     softhsm_source_url=https://codeload.github.com/softhsm/SoftHSMv2/tar.gz/refs/tags/$app_version
     app_version_is_latest=1
     ;;
-  develop) softhsm_source_url=https://codeload.github.com/softhsm/SoftHSMv2/tar.gz/refs/heads/develop ;;
+  develop) softhsm_source_url=https://codeload.github.com/softhsm/SoftHSMv2/tar.gz/refs/heads/main ;;
   *)       softhsm_source_url=https://codeload.github.com/softhsm/SoftHSMv2/tar.gz/refs/tags/$app_version ;;
 esac
 log INFO "app_version=$app_version"
