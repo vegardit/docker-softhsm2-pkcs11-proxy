@@ -128,6 +128,7 @@ case $base_image in
   *) echo "ERROR: Unsupported base image $base_image"; exit 1 ;;
 esac
 
+# shellcheck disable=SC2154  # base_layer_cache_key is referenced but not assigned
 build_opts=(
   --file "image/$dockerfile"
   --builder "$builder_name"
