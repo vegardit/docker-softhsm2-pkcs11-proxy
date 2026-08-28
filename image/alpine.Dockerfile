@@ -1,4 +1,5 @@
 #syntax=docker/dockerfile:1
+# check=skip=SecretsUsedInArgOrEnv
 # see https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/reference.md
 # see https://docs.docker.com/engine/reference/builder/#syntax
 #
@@ -83,7 +84,8 @@ RUN <<EOF
   curl -fsS "$PKCS11_PROXY_SOURCE_URL" | tar xvz
   mv pkcs11-proxy-* pkcs11-proxy
   cd pkcs11-proxy || exit 1
-  cmake .
+  # pkcs11-proxy still requests CMake policies older than those supported by CMake 4.
+  cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .
   make
   make install
 
@@ -96,7 +98,7 @@ EOF
 
 # https://github.com/hadolint/hadolint/wiki/DL3006 Always tag the version of an image explicitly
 # hadolint ignore=DL3006
-FROM ${BASE_IMAGE} as final
+FROM ${BASE_IMAGE} AS final
 
 SHELL ["/bin/ash", "-euo", "pipefail", "-c"]
 
