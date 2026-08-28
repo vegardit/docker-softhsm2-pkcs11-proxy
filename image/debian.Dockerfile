@@ -143,6 +143,7 @@ COPY image/test.* /opt
 COPY .shared/lib/bash-init.sh /opt/bash-init.sh
 
 # Default configuration: can be overridden at the docker command line
+# hadolint ignore=DL3064 # Only test/default values and secret file paths are baked into the image
 ENV \
   INIT_SH_FILE='/opt/init-token.sh' \
   #
